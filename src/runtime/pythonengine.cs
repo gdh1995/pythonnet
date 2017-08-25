@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -166,6 +166,7 @@ namespace Python.Runtime
                 delegateManager = new DelegateManager();
                 Runtime.Initialize();
                 initialized = true;
+                IntPtr gs = AcquireLock();
                 Exceptions.Clear();
 
                 if (setSysArgv)
@@ -219,6 +220,7 @@ namespace Python.Runtime
                 finally
                 {
                     locals.Dispose();
+                    ReleaseLock(gs);
                 }
             }
         }

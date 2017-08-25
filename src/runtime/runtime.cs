@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
@@ -324,6 +324,15 @@ namespace Python.Runtime
             PyList_Append(path, item);
             XDecref(item);
             AssemblyManager.UpdatePath();
+
+            if (PyEval_ThreadsInitialized() != 0)
+            {
+                IntPtr tstat = PyThreadState_Get();
+                if (tstat != IntPtr.Zero)
+                {
+                    PyEval_ReleaseThread(tstat);
+                }
+            }
         }
 
         internal static void Shutdown()
